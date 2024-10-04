@@ -1,24 +1,28 @@
-﻿<h1 id="tableLabel">Weather forecast</h1>
+﻿<h1 id="tableLabel">Cálculo de CDB</h1>
 
-<p>This component demonstrates fetching data from the server.</p>
+<p>Este componente demonstra o cálculo do CDB com base na entrada do usuário.</p>
 
-<p *ngIf="!forecasts"><em>Loading... Please refresh once the ASP.NET backend has started. See <a href="https://aka.ms/jspsintegrationangular">https://aka.ms/jspsintegrationangular</a> for more details.</em></p>
+<form [formGroup]="cdbForm" (ngSubmit)="calculateCdb()" class="cdb-form">
+    <div class="form-group">
+        <label for="initialValue">Valor Inicial:</label>
+        <input id="initialValue" formControlName="valor" type="number" required placeholder="Digite o valor inicial" />
+    </div>
+    <div class="form-group">
+        <label for="totalMonth">Quantidade de Meses:</label>
+        <input id="totalMonth" formControlName="mes" type="number" required placeholder="Digite a quantidade de meses" />
+    </div>
+    <button type="submit" [disabled]="cdbForm.invalid" class="submit-button">Calcular CDB</button>
+</form>
 
-<table *ngIf="forecasts">
-    <thead>
-        <tr>
-            <th>Date</th>
-            <th>Temp. (C)</th>
-            <th>Temp. (F)</th>
-            <th>Summary</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let forecast of forecasts">
-            <td>{{ forecast.date }}</td>
-            <td>{{ forecast.temperatureC }}</td>
-            <td>{{ forecast.temperatureF }}</td>
-            <td>{{ forecast.summary }}</td>
-        </tr>
-    </tbody>
-</table>
+<div *ngIf="response" class="result">
+    <h2>Resultado do Cálculo</h2>
+    <p><strong>Valor Inicial:</strong> {{ response.initialValue | currency:'BRL':'symbol':'1.2-2' }}</p>
+    <p><strong>Quantidade de Meses:</strong> {{ response.totalMonths }}</p>
+    <p><strong>Valor Bruto:</strong> {{ response.grossAmount | currency:'BRL':'symbol':'1.2-2' }}</p>
+    <p><strong>Valor do Imposto:</strong> {{ response.taxAmount | currency:'BRL':'symbol':'1.2-2' }}</p>
+    <p><strong>Valor Líquido:</strong> {{ response.netAmount | currency:'BRL':'symbol':'1.2-2' }}</p>
+    <p><strong>CDI:</strong> {{ response.cdi | percent:'1.0-2' }}</p>
+    <p><strong>Taxa do Banco:</strong> {{ response.bankRate | percent:'1.0-2' }}</p>    
+</div>
+
+<p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>

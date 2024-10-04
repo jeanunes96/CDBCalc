@@ -1,36 +1,61 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-interface WeatherForecast {
-  date: string;
-  temperatureC: number;
-  temperatureF: number;
-  summary: string;
+interface CalculationRequest {
+  initialValue: number;
+  totalMonth: number;  
+}
+
+interface CalculationResponse {
+  initialValue?: number;  
+  totalMonths: number;    
+  grossAmount?: number;   
+  taxAmount?: number;     
+  netAmount?: number;     
+  cdi?: number;           
+  bankRate?: number; 
 }
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  public forecasts: WeatherForecast[] = [];
+  public response: CalculationResponse | null = null;
+  public errorMessage: string | null = null; 
+  public cdbForm: FormGroup; 
 
-  constructor(private http: HttpClient) {}
-
-  ngOnInit() {
-    this.getForecasts();
+  constructor(private http: HttpClient, private fb: FormBuilder) {
+    this.cdbForm = this.fb.group({
+      valor: [0, [Validators.required, Validators.min(0)]],
+      mes: [0, [Validators.required, Validators.min(1)]],
+    });
   }
 
-  getForecasts() {
-    this.http.get<WeatherForecast[]>('/weatherforecast').subscribe(
-      (result) => {
-        this.forecasts = result;
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
+  ngOnInit() {}
+
+  calculateCdb() {
+    if (this.cdbForm.valid) {
+      const request: CalculationRequest = {
+        initialValue: this.cdbForm.value.valor,
+        totalMonth: this.cdbForm.value.mes,
+      };
+
+      this.http.post<CalculationResponse>('https://localhost:7078/api/investment/calculate-cdb', request).subscribe(
+        (result) => {
+          this.response = result;
+          this.errorMessage = null;
+        },
+        (error) => {
+          console.error(error);
+          this.errorMessage = "An error occurred while calculating.";
+        }
+      );
+    } else {
+      this.errorMessage = "Please fill out the form correctly.";
+    }
   }
 
   title = 'cdbcalc.client';
