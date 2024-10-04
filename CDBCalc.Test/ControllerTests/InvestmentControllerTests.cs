@@ -50,8 +50,8 @@ namespace CDBCalc.Test.ControllerTests
 
             Assert.Multiple(() =>
             {
-                Assert.That(okResult.StatusCode, Is.EqualTo((int)HttpStatusCode.OK));
-                Assert.That(okResult.Value, Is.EqualTo(expectedResponse));
+                Assert.That(okResult?.StatusCode, Is.EqualTo((int)HttpStatusCode.OK));
+                Assert.That(okResult?.Value, Is.EqualTo(expectedResponse));
             });
         }
 
@@ -66,8 +66,8 @@ namespace CDBCalc.Test.ControllerTests
 
             Assert.Multiple(() =>
             {
-                Assert.That(badRequestResult.StatusCode, Is.EqualTo((int)HttpStatusCode.BadRequest));
-                Assert.That(badRequestResult.Value, Is.EqualTo("Request cannot be null."));
+                Assert.That(badRequestResult?.StatusCode, Is.EqualTo((int)HttpStatusCode.BadRequest));
+                Assert.That(badRequestResult?.Value, Is.EqualTo("Request cannot be null."));
             });
         }
     }
