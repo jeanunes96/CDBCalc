@@ -43,16 +43,17 @@ export class AppComponent implements OnInit {
         totalMonth: this.cdbForm.value.mes,
       };
 
-      this.http.post<CalculationResponse>('https://localhost:7078/api/investment/calculate-cdb', request).subscribe(
-        (result) => {
+      this.http.post<CalculationResponse>('https://localhost:7078/api/investment/calculate-cdb', request).subscribe({
+        next: (result) => {
           this.response = result;
           this.errorMessage = null;
         },
-        (error) => {
+        error: (error) => {
           console.error(error);
           this.errorMessage = "An error occurred while calculating.";
         }
-      );
+      });
+
     } else {
       this.errorMessage = "Please fill out the form correctly.";
     }
