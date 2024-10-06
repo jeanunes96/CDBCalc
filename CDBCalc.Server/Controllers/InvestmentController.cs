@@ -16,7 +16,7 @@ namespace CDBCalc.Server.Controllers
         }
 
         [HttpPost("calculate-cdb")]
-        public ActionResult<CalculationResponse> CalculateCdb([FromBody] CalculationRequest request)
+        public ActionResult<CalculationResponse> CalculateCdb([FromBody] CalculationRequest? request)
         {
             if (request == null)
             {

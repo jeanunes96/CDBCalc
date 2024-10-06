@@ -19,25 +19,25 @@ namespace CDBCalc.Tests.Services
         [Test]
         public void CalculateCdb_ValidRequest_ReturnsCorrectResponse()
         {
-            // Arrange
             var request = new CalculationRequest
             {
                 InitialValue = 1000m,
                 TotalMonth = 12
             };
 
-            // Act
             var response = _investmentCalculatorService.CalculateCdb(request);
-
-            // Assert
-            Assert.That(response, Is.Not.Null);
-            Assert.That(response.GrossAmount, Is.GreaterThan(0));
-            Assert.That(response.NetAmount, Is.GreaterThan(0));
-            Assert.That(response.TaxAmount, Is.GreaterThan(0));
-            Assert.That(response.InitialValue, Is.EqualTo(request.InitialValue));
-            Assert.That(response.TotalMonths, Is.EqualTo(request.TotalMonth));
-            Assert.That(response.Cdi, Is.EqualTo(0.009m));
-            Assert.That(response.BankRate, Is.EqualTo(1.08m));
+          
+            Assert.Multiple(() =>
+            {
+                Assert.That(response, Is.Not.Null);
+                Assert.That(response.GrossAmount, Is.GreaterThan(0));
+                Assert.That(response.NetAmount, Is.GreaterThan(0));
+                Assert.That(response.TaxAmount, Is.GreaterThan(0));
+                Assert.That(response.InitialValue, Is.EqualTo(request.InitialValue));
+                Assert.That(response.TotalMonths, Is.EqualTo(request.TotalMonth));
+                Assert.That(response.Cdi, Is.EqualTo(0.009m));
+                Assert.That(response.BankRate, Is.EqualTo(1.08m));
+            });
         }
 
         [Test]
