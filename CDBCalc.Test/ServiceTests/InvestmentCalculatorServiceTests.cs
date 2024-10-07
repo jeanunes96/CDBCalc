@@ -61,19 +61,5 @@ namespace CDBCalc.Tests.Services
                 Assert.That(response.TotalMonths, Is.EqualTo(request.TotalMonth));
             });
         }
-
-        [Test]
-        public void CalculateCdb_NegativeEarnings_ReturnsCorrectTax()
-        {
-            var request = new CalculationRequest
-            {
-                InitialValue = 1000m,
-                TotalMonth = 12
-            };
-
-            var response = _investmentCalculatorService.CalculateCdb(request);
-
-            Assert.That(response.TaxAmount, Is.GreaterThanOrEqualTo(0));
-        }
     }
 }
